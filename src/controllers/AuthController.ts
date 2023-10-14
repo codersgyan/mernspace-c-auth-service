@@ -8,6 +8,8 @@ import { Logger } from "winston";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import { Config } from "../config";
+import { RefreshToken } from "../entity/RefreshToken";
+import { AppDataSource } from "../config/data-source";
 
 export class AuthController {
     constructor(
@@ -66,10 +68,20 @@ export class AuthController {
                 issuer: "auth-service",
             });
 
+            const refreshRepository = AppDataSource.getRepository(RefreshToken);
+            // make sure to care of leap year here.... (366)
+            const MS_IN_YEAR = 1000 * 60 * 60 * 24 * 365;
+
+            const newRefreshToken = await refreshRepository.save({
+                user: user,
+                expires_at: new Date(Date.now() + MS_IN_YEAR),
+            });
+
             const refreshToken = sign(payload, Config.REFRESH_TOKEN_SECRET!, {
                 algorithm: "HS256",
-                expiresIn: "1y",
+                expiresIn: MS_IN_YEAR.toString(),
                 issuer: "auth-service",
+                jwtid: String(newRefreshToken.id),
             });
 
             res.cookie("accessToken", accessToken, {

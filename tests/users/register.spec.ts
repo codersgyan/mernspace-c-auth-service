@@ -5,6 +5,7 @@ import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
 import { Roles } from "../../src/constants";
 import { isJwt } from "../utils";
+import { RefreshToken } from "../../src/entity/RefreshToken";
 
 describe("POST /auth/register", () => {
     let connection: DataSource;
@@ -194,11 +195,43 @@ describe("POST /auth/register", () => {
             });
             expect(accessToken).not.toBeNull();
             expect(refreshToken).not.toBeNull();
-
             expect(isJwt(accessToken)).toBeTruthy();
             expect(isJwt(refreshToken)).toBeTruthy();
         });
+
+        it("should store the refresh token in the database", async () => {
+            // Arrange
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "rakesh@mern.space",
+                password: "password",
+            };
+
+            // Act
+            await request(app).post("/auth/register").send(userData);
+            const refreshTokenRepository =
+                connection.getRepository(RefreshToken);
+
+            const userRepository = connection.getRepository(User);
+            const users = await userRepository.find();
+
+            const tokens = await refreshTokenRepository
+                .createQueryBuilder("refreshToken")
+                // .leftJoinAndSelect("refreshToken.user", "user")
+                .where("refreshToken.userId = :userId", { userId: users[0].id })
+                // .loadAllRelationIds()
+                .getMany();
+            // const tokens = await refreshTokenRepository.find({
+            //     relations: {
+            //         user: true,
+            //     },
+            // });
+
+            expect(tokens.length).toBe(1);
+        });
     });
+
     describe("Fields are missing", () => {
         it("should return 400 status code if email field is missing", async () => {
             // Arrange
