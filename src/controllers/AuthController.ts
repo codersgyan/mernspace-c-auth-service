@@ -68,14 +68,14 @@ export class AuthController {
             });
 
             res.cookie("accessToken", accessToken, {
-                domain: "localhost",
+                domain: "elib.lol",
                 sameSite: "strict",
                 maxAge: 1000 * 60 * 60 * 24 * 1, // 1d
                 httpOnly: true, // Very important
             });
 
             res.cookie("refreshToken", refreshToken, {
-                domain: "localhost",
+                domain: "elib.lol",
                 sameSite: "strict",
                 maxAge: 1000 * 60 * 60 * 24 * 365, // 1y
                 httpOnly: true, // Very important
@@ -147,14 +147,14 @@ export class AuthController {
             });
 
             res.cookie("accessToken", accessToken, {
-                domain: "localhost",
+                domain: "elib.lol",
                 sameSite: "strict",
                 maxAge: 1000 * 60 * 60 * 24 * 1, // 1d
                 httpOnly: true, // Very important
             });
 
             res.cookie("refreshToken", refreshToken, {
-                domain: "localhost",
+                domain: "elib.lol",
                 sameSite: "strict",
                 maxAge: 1000 * 60 * 60 * 24 * 365, // 1y
                 httpOnly: true, // Very important
@@ -169,6 +169,7 @@ export class AuthController {
     }
 
     async self(req: AuthRequest, res: Response) {
+        console.log("headers", req.headers);
         // token req.auth.id
         const user = await this.userService.findById(Number(req.auth.sub));
         res.json({ ...user, password: undefined });
@@ -210,14 +211,14 @@ export class AuthController {
             });
 
             res.cookie("accessToken", accessToken, {
-                domain: "localhost",
+                domain: "elib.lol",
                 sameSite: "strict",
                 maxAge: 1000 * 60 * 60 * 24 * 1, // 1d
                 httpOnly: true, // Very important
             });
 
             res.cookie("refreshToken", refreshToken, {
-                domain: "localhost",
+                domain: "elib.lol",
                 sameSite: "strict",
                 maxAge: 1000 * 60 * 60 * 24 * 365, // 1y
                 httpOnly: true, // Very important

@@ -17,10 +17,13 @@ export default expressjwt({
         // Bearer eyjllsdjfljlasdjfljlsadjfljlsdf
         if (authHeader && authHeader.split(" ")[1] !== "undefined") {
             const token = authHeader.split(" ")[1];
+
             if (token) {
                 return token;
             }
         }
+
+        console.log("cookies", req.cookies);
 
         const { accessToken } = req.cookies as AuthCookie;
         return accessToken;
