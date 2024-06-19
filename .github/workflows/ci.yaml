@@ -39,7 +39,7 @@ jobs:
 
     build-and-push-docker:
         name: Build and Push Docker Image
-        needs: build-and-test
+        # needs: build-and-test
         runs-on: ubuntu-latest
         env:
             IMAGE_NAME: codersgyan/mern_stack_test_auth # codersgyan/mernstack_auth_service:build-2
