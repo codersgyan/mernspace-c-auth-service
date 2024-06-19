@@ -44,7 +44,7 @@ jobs:
         env:
             IMAGE_NAME: codersgyan/mern_stack_test_auth # codersgyan/mernstack_auth_service:build-2
             IMAGE_TAG: build-${{ github.run_number }}
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
